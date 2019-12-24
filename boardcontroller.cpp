@@ -115,7 +115,11 @@ void BoardController::TestVal(int x, int y)
 void BoardController::ResetBoardChess()
 {
     qDebug()<<"BoardController::ResetBoardChess+";
-    ChessCharacter* RedKing = new ChessKing(RED,4,9);
-    m_pChessBoard->SetBoardValue(RedKing->GetChessPosX(),RedKing->GetChessPosY(),&RedKing);
+    ChessCharacter* pRedKing = new ChessKing(RED,4,9);
+    m_pChessBoard->SetBoardValue(pRedKing->GetChessPosX(),pRedKing->GetChessPosY(),&pRedKing);
+    ChessCharacter* pRedQueen = new ChessQueen(RED,3,9);
+    m_pChessBoard->SetBoardValue(pRedQueen->GetChessPosX(),pRedQueen->GetChessPosY(),&pRedQueen);
+    ChessCharacter* pRedQueen2 = new ChessQueen(RED,5,9);
+    m_pChessBoard->SetBoardValue(pRedQueen2->GetChessPosX(),pRedQueen2->GetChessPosY(),&pRedQueen2);
     qDebug()<<"BoardController::ResetBoardChess-";
 }

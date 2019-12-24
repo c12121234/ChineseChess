@@ -15,7 +15,14 @@ ChessCharacter::~ChessCharacter()
 
 bool ChessCharacter::Move(ChessBoard* cb,int posX, int posY)
 {
-    return false;
+    bool bMove = false;
+    if(!CantMoveCondition(cb,posX,posY))
+    {
+        m_posX = posX;
+        m_posY = posY;
+        bMove = true;
+    }
+    return bMove;
 }
 
 bool ChessCharacter::CantMoveCondition(ChessBoard *cb, int posX, int posY)
@@ -67,21 +74,9 @@ ChessKing::~ChessKing()
 
 }
 
-bool ChessKing::Move(ChessBoard* cb,int posX, int posY)
-{
-    bool bMove = false;
-    if(!CantMoveCondition(cb,posX,posY))
-    {
-        m_posX = posX;
-        m_posY = posY;
-        bMove = true;
-    }
-    return bMove;
-}
-
 bool ChessKing::CantMoveCondition(ChessBoard* cb,int posX, int posY)
 {
-    if(posX>5 || posX< 3 )//|| posY>2 || posY< 0)
+    if(posX>5 || posX< 3 )
         return true;
     if(m_Team == RED && (posY<7))
         return true;
@@ -95,4 +90,29 @@ bool ChessKing::CantMoveCondition(ChessBoard* cb,int posX, int posY)
     if(abs(m_posX-posX)+abs(m_posY-posY)>1)
         return true;
     return false;
+}
+
+ChessQueen::ChessQueen(Team team, int x, int y, QObject *parent):
+    ChessCharacter(team,x,y,parent)
+{
+
+}
+
+ChessQueen::~ChessQueen()
+{
+
+}
+
+bool ChessQueen::CantMoveCondition(ChessBoard *cb, int posX, int posY)
+{
+    if(posX>5 || posX< 3 )
+        return true;
+    if(m_Team == RED && (posY<7))
+        return true;
+    if(m_Team == BLACK && posY>3)
+        return true;
+    Team Temp = cb->GetBoardValue(posX,posY);
+    if(Temp == m_Team)
+        return true;
+    return (abs(m_posX-posX)==1 && abs(m_posY-posY)==1)? false:true;
 }

@@ -32,7 +32,15 @@ class ChessKing : public ChessCharacter
 public:
     explicit ChessKing(Team team,int x,int y,QObject* parent = nullptr);
     ~ChessKing() override;
-    bool Move(ChessBoard* cb,int posX, int posY) override;
+    bool CantMoveCondition(ChessBoard* cb,int posX,int posY) override;
+};
+
+class ChessQueen:public ChessCharacter
+{
+    Q_OBJECT
+public:
+    explicit ChessQueen(Team team,int x,int y,QObject* parent = nullptr);
+    ~ChessQueen() override;
     bool CantMoveCondition(ChessBoard* cb,int posX,int posY) override;
 };
 
