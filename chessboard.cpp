@@ -20,7 +20,7 @@ ChessBoard::~ChessBoard()
     delete m_pBoard;
 }
 
-Team ChessBoard::GetBoardValue(int x, int y)
+Team ChessBoard::GetBoardTeamValue(int x, int y)
 {
     ChessCharacter* pcc = m_pBoard->operator[](x).operator[](y);
     return pcc ? pcc->GetChessTeam() : ZERO;
@@ -68,6 +68,18 @@ void ChessBoard::TestChessValueByCoor(int x, int y)
     else
     {
         qDebug()<<"chess null";
+    }
+}
+
+void ChessBoard::ClearChessBoard()
+{
+    for(size_t i =0; i<m_pBoard->size();++i)
+    {
+        for(size_t j = 0; j<m_pBoard->operator[](0).size();++j)
+        {
+            if(m_pBoard->operator[](i)[j])
+                delete m_pBoard->operator[](i)[j];
+        }
     }
 }
 

@@ -32,6 +32,7 @@ public:
     bool eventFilter(QObject* obj,QEvent* event) override;
 public slots:
     void HandleCoordinateToViewUpdate(pair<int,int> p1,pair<int,int> p2);
+    void HandleBeepSound();
 private:
     void InitScene();
     void InitChess();

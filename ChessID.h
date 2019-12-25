@@ -8,6 +8,14 @@ enum Team
     BLACK = 2
 };
 
+enum Direction
+{
+    PLUSX = 0,
+    MINUSX = 1,
+    PLUSY = 2,
+    MINUSY = 3
+};
+
 enum CHARACTER
 {
     KING = 1,

@@ -27,12 +27,12 @@ MainWindow::MainWindow(QWidget *parent)
 {
     MainWindow* pTemp = this;
     m_pBoardController = new BoardController(&pTemp);
+    connect(m_pBoardController,&BoardController::SendBeepSound,this,&MainWindow::HandleBeepSound);
     vector<tuple<QGraphicsItem*,QPixmap*,pair<int,int>>> vTemp(32,std::make_tuple(nullptr,nullptr,std::make_pair(-1,-1)));
     m_chessArr = vTemp;
     ui->setupUi(this);
     ui->graphicsView->installEventFilter(this);
     InitScene();
-    //connect(this,&MainWindow::SendMouseEventToConTroller,m_spBoardController.get(),&BoardController::HandleMouseEventFromView);
 }
 
 MainWindow::~MainWindow()
@@ -83,6 +83,11 @@ void MainWindow::HandleCoordinateToViewUpdate(pair<int, int> p1, pair<int, int> 
             break;
         }
     }
+}
+
+void MainWindow::HandleBeepSound()
+{
+    QApplication::beep();
 }
 
 void MainWindow::InitScene()

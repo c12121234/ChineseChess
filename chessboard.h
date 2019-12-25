@@ -14,11 +14,12 @@ class ChessBoard : public QObject
 public:
     explicit ChessBoard(QObject *parent = nullptr);
     ~ChessBoard();
-    Team GetBoardValue(int x,int y);
+    Team GetBoardTeamValue(int x,int y);
     void SetBoardValue(int x,int y,ChessCharacter** character);
     bool MoveChess(int x0,int y0,int x1,int y1);
     void SetChessCoordinate(int x,int y,int Valx,int Valy);
     void TestChessValueByCoor(int x,int y);
+    void ClearChessBoard();
     int GetBoardSizeCoordinateX();
     int GetBoardSizeCoordinateY();
 //signals:

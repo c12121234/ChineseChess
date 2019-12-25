@@ -16,16 +16,20 @@ public:
     ~BoardController();
 signals:
     void SendCoordinateToViewUpdate(std::pair<int,int> p1,std::pair<int,int> p2);
+    void SendBeepSound();
 public slots:
     void HandleMouseEventFromView(QGraphicsSceneMouseEvent* event);
-    void ResetBoardChess();
+    void InitBoardChess();
 private:
     void ConvertCoodinateToChess(int x,int y);
     bool isOutOfRange(int x,int y);
     bool isOutOfChessRadius(int x,int y);
     void DoChessMove();
     void TestVal(int x,int y);
-
+    void ClearBoardChess();
+    void ControlAlarm();
+    void InitRedTeam();
+    void InitBlackTeam();
     ChessBoard* m_pChessBoard;
     std::vector<std::pair<int,int>>* m_pCoodinate;
     MainWindow* m_pMainWindow;
