@@ -3,7 +3,7 @@
 #include <QDebug>
 #include <stdlib.h>
 ChessCharacter::ChessCharacter(Team Team, int x, int y, QObject *parent) : QObject(parent)
-  ,m_Team(Team),m_posX(x),m_posY(y)
+  ,m_Team(Team),m_posX(x),m_posY(y),m_bKing(false)
 {
 
 }
@@ -68,16 +68,28 @@ bool ChessCharacter::isEatSelfTeam(ChessBoard *cb, int posX, int posY)
     return Temp == m_Team ? true :false;
 }
 
+bool ChessCharacter::isKing()
+{
+    return m_bKing;
+}
+
 ChessKing::ChessKing(Team team,int x,int y, QObject *parent):
     ChessCharacter(team,x,y,parent)
 {
     qDebug()<<"ChessKing::ChessKing+";
+    m_bKing = true;
     qDebug()<<"ChessKing::ChessKing-";
 }
 
 
 bool ChessKing::CantMoveCondition(ChessBoard* cb,int posX, int posY)
 {
+    //return true means can't move to that pos.
+    if(cb->CheckChessIsKing(posX,posY))
+    {
+        bool bAttack = isSpecialAttack(cb,posX,posY);
+        return (bAttack == true) ? false :true;
+    }
     if(posX>5 || posX< 3 )
         return true;
     if(m_Team == RED && (posY<7))
@@ -91,6 +103,19 @@ bool ChessKing::CantMoveCondition(ChessBoard* cb,int posX, int posY)
     if(abs(m_posX-posX)+abs(m_posY-posY)>1)
         return true;
     return false;
+}
+
+bool ChessKing::isSpecialAttack(ChessBoard *cb, int posX, int posY)
+{
+    bool bBlock = false;
+    int moveX = posX-m_posX;
+    if(abs(moveX)!=0)
+        return false;
+    if(m_Team == RED)
+        bBlock = ChessBoardUtil::isInBlockRange(cb,MINUSY,m_posX,m_posY,posY,TOWER);
+    else if(m_Team == BLACK)
+        bBlock = ChessBoardUtil::isInBlockRange(cb,PLUSY,m_posX,m_posY,posY,TOWER);
+    return (bBlock == true)?false:true;
 }
 
 ChessQueen::ChessQueen(Team team, int x, int y, QObject *parent):
@@ -164,6 +189,7 @@ bool ChessBishop::isBlock(ChessBoard *cb, int posX, int posY)
         Team tBlock = cb->GetBoardTeamValue(m_posX-1,m_posY-1);
         bBlock = (tBlock == ZERO) ? false :true;
     }
+    return bBlock;
 }
 
 ChessKnight::ChessKnight(Team team, int x, int y, QObject *parent):

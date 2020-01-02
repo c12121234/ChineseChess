@@ -21,10 +21,12 @@ public:
     int GetChessPosY();
     void SetChessPosY(int y);
     bool isEatSelfTeam(ChessBoard* cb,int posX,int posY);
+    bool isKing();
 protected:
     Team m_Team;
     int m_posX;
     int m_posY;
+    bool m_bKing;
 };
 
 class ChessKing : public ChessCharacter
@@ -33,6 +35,8 @@ class ChessKing : public ChessCharacter
 public:
     explicit ChessKing(Team team,int x,int y,QObject* parent = nullptr);
     bool CantMoveCondition(ChessBoard* cb,int posX,int posY) override;
+private:
+    bool isSpecialAttack(ChessBoard* cb,int posX,int posY); //王見王
 };
 
 class ChessQueen:public ChessCharacter

@@ -18,6 +18,7 @@ BoardController::BoardController(MainWindow** ppMainWindow,QObject *parent) : QO
 , m_nChessXBegin(40)
 , m_nChessYBegin(39)
 , m_nPairCoodinateIndex(0)
+, m_bEnableBeepSound(true)
 {    
     connect(this,&BoardController::SendCoordinateToViewUpdate,m_pMainWindow,&MainWindow::HandleCoordinateToViewUpdate);
     QTimer::singleShot(50,this,&BoardController::InitBoardChess);
@@ -36,6 +37,7 @@ void BoardController::HandleMouseEventFromView(QGraphicsSceneMouseEvent *event)
     m_nPairCoodinateIndex++;
     if(m_nPairCoodinateIndex == 2)
     {
+        m_bEnableBeepSound = true;
         DoChessMove();
         m_nPairCoodinateIndex %= 2;
     }
@@ -93,7 +95,8 @@ void BoardController::DoChessMove()
     Team chess1 = m_pChessBoard->GetBoardTeamValue(m_pCoodinate->operator[](0).first,m_pCoodinate->operator[](0).second);
     if(chess1 == ZERO)
     {
-        ControlAlarm();
+        if(m_bEnableBeepSound)
+            ControlAlarm();
         return;
     }
     bool bRet = m_pChessBoard->MoveChess(m_pCoodinate->operator[](0).first,m_pCoodinate->operator[](0).second,
@@ -101,16 +104,24 @@ void BoardController::DoChessMove()
     if(bRet)
     {
         //emit updateboard.
-        emit SendCoordinateToViewUpdate(m_pCoodinate->operator[](0),m_pCoodinate->operator[](1));
-        TestVal(m_pCoodinate->operator[](1).first,m_pCoodinate->operator[](1).second);
-        TestVal(m_pCoodinate->operator[](0).first,m_pCoodinate->operator[](0).second);
+        emit SendCoordinateToViewUpdate(m_pCoodinate->operator[](0),m_pCoodinate->operator[](1));        
     }
     else
     {
         //emit alarm.
         ControlAlarm();
     }
-    qDebug()<<"BoardController::DoChessMove-";
+            qDebug()<<"BoardController::DoChessMove-";
+}
+
+void BoardController::HandleSendChangedm_pCoordinate(int posX1, int posY1, int posX2, int posY2)
+{
+    m_pCoodinate->operator[](0).first = posX1;
+    m_pCoodinate->operator[](0).second = posY1;
+    m_pCoodinate->operator[](1).first = posX2;
+    m_pCoodinate->operator[](1).second = posY2;
+    m_bEnableBeepSound = false;
+    DoChessMove();
 }
 
 void BoardController::TestVal(int x, int y)
@@ -125,11 +136,7 @@ void BoardController::ClearBoardChess()
 
 void BoardController::ControlAlarm()
 {
-    m_pCoodinate->operator[](0).first = 0;
-    m_pCoodinate->operator[](0).second = 0;
-    m_pCoodinate->operator[](1).first = 0;
-    m_pCoodinate->operator[](1).second = 0;
-    m_nPairCoodinateIndex = 0;
+    ResetCoordinate();
     emit SendBeepSound();
 }
 
@@ -205,9 +212,20 @@ void BoardController::InitBlackTeam()
     m_pChessBoard->SetBoardValue(pBlackMinion5->GetChessPosX(),pBlackMinion5->GetChessPosY(),&pBlackMinion5);
 }
 
+void BoardController::ResetCoordinate()
+{
+    m_nPairCoodinateIndex = 0;
+    m_bEnableBeepSound = true;
+    m_pCoodinate->operator[](0).first = 0;
+    m_pCoodinate->operator[](0).second = 0;
+    m_pCoodinate->operator[](1).first = 0;
+    m_pCoodinate->operator[](1).second = 0;
+}
+
 void BoardController::InitBoardChess()
 {
     qDebug()<<"BoardController::InitBoardChess+";
+    ResetCoordinate();
     ClearBoardChess();
     InitRedTeam();
     InitBlackTeam();

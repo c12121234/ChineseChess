@@ -1,4 +1,4 @@
-QT       += core gui
+QT       += core gui network
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -21,11 +21,13 @@ SOURCES += \
     chessboard.cpp \
     chessboardutil.cpp \
     chesscharacter.cpp \
+    choosemode.cpp \
     convertcoordinate.cpp \
     main.cpp \
     mainwindow.cpp \
     mygraphicsscene.cpp \
-    mygraphicsview.cpp
+    mygraphicsview.cpp \
+    netgamewindow.cpp
 
 HEADERS += \
     ChessID.h \
@@ -34,12 +36,15 @@ HEADERS += \
     chessboard.h \
     chessboardutil.h \
     chesscharacter.h \
+    choosemode.h \
     convertcoordinate.h \
     mainwindow.h \
     mygraphicsscene.h \
-    mygraphicsview.h
+    mygraphicsview.h \
+    netgamewindow.h
 
 FORMS += \
+    choosemode.ui \
     mainwindow.ui
 
 # Default rules for deployment.

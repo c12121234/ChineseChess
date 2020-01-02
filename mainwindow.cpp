@@ -31,8 +31,11 @@ MainWindow::MainWindow(QWidget *parent)
     vector<tuple<QGraphicsItem*,QPixmap*,pair<int,int>>> vTemp(32,std::make_tuple(nullptr,nullptr,std::make_pair(-1,-1)));
     m_chessArr = vTemp;
     ui->setupUi(this);
+    connect(ui->ActionNewGame,&QAction::triggered,this,&MainWindow::HandleNewGame);
+    connect(ui->ActionNewGame,&QAction::triggered,m_pBoardController,&BoardController::InitBoardChess);
     ui->graphicsView->installEventFilter(this);
     InitScene();
+
 }
 
 MainWindow::~MainWindow()
@@ -79,7 +82,8 @@ void MainWindow::HandleCoordinateToViewUpdate(pair<int, int> p1, pair<int, int> 
         {
             std::get<0>(TempTuple)->setPos(ConvertCoordinate::ConverX(p2.first),ConvertCoordinate::ConverY(p2.second));
             std::get<2>(TempTuple) = p2;
-            ui->graphicsView->show();
+            //ui->graphicsView->show();
+            ui->graphicsView->update();
             break;
         }
     }
@@ -88,6 +92,15 @@ void MainWindow::HandleCoordinateToViewUpdate(pair<int, int> p1, pair<int, int> 
 void MainWindow::HandleBeepSound()
 {
     QApplication::beep();
+}
+
+void MainWindow::HandleNewGame()
+{
+    BindingRedTeam();
+    BindingBlackTeam();
+    ShowAllChess();
+    //ui->graphicsView->show();
+    ui->graphicsView->update();
 }
 
 void MainWindow::InitScene()
@@ -100,6 +113,7 @@ void MainWindow::InitScene()
     m_spBoardImage->load("Resource/Board.png");
     m_spScene->addPixmap(QPixmap::fromImage(*m_spBoardImage));        
     InitChess();
+    //connect(ui->ActionNewGame,&QAction::triggered,this,&MainWindow::HandleNewGame);
     ui->graphicsView->show();
 }
 
@@ -129,6 +143,12 @@ void MainWindow::CreateChessPair(int i)
     m_spScene->addItem(chess);
     auto tempt = std::make_tuple(std::ref(chess),std::ref(pic),std::make_pair(-1,-1));
     m_chessArr[i] = tempt;
+}
+
+void MainWindow::ShowAllChess()
+{
+    for(auto& TempTuple :m_chessArr)
+        std::get<0>(TempTuple)->show();
 }
 
 void MainWindow::BindingRedTeam()
@@ -355,5 +375,3 @@ void MainWindow::BindingBlackMinion()
     TempPair5.first = 8;
     TempPair5.second = 3;
 }
-
-

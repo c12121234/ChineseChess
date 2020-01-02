@@ -15,6 +15,7 @@ public:
     explicit ChessBoard(QObject *parent = nullptr);
     ~ChessBoard();
     Team GetBoardTeamValue(int x,int y);
+    bool CheckChessIsKing(int x, int y);
     void SetBoardValue(int x,int y,ChessCharacter** character);
     bool MoveChess(int x0,int y0,int x1,int y1);
     void SetChessCoordinate(int x,int y,int Valx,int Valy);

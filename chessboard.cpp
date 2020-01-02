@@ -26,6 +26,12 @@ Team ChessBoard::GetBoardTeamValue(int x, int y)
     return pcc ? pcc->GetChessTeam() : ZERO;
 }
 
+bool ChessBoard::CheckChessIsKing(int x, int y)
+{
+    ChessCharacter* pcc = m_pBoard->operator[](x).operator[](y);
+    return pcc ? pcc->isKing() : false;
+}
+
 void ChessBoard::SetBoardValue(int x, int y, ChessCharacter **character)
 {
     m_pBoard->operator[](x)[y] = *character;
@@ -78,7 +84,11 @@ void ChessBoard::ClearChessBoard()
         for(size_t j = 0; j<m_pBoard->operator[](0).size();++j)
         {
             if(m_pBoard->operator[](i)[j])
+            {
                 delete m_pBoard->operator[](i)[j];
+                m_pBoard->operator[](i)[j] = nullptr;
+            }
+
         }
     }
 }
