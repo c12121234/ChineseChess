@@ -2,12 +2,16 @@
 #include "ui_choosemode.h"
 #include "netgamewindow.h"
 #include <QtNetwork>
-
+#include <QPainter>
 ChooseMode::ChooseMode(QWidget *parent) :
     QDialog(parent),
     m_nChoose(0),ui(new Ui::ChooseMode),m_pLocalGame(nullptr),m_pNetworkGame(nullptr)
 {
     ui->setupUi(this);
+    SettingPageButton();
+    SettingPage2Button();
+    SettingPage3Button();
+    SettingPage4Button();
     ui->page->show();
 }
 
@@ -111,10 +115,6 @@ void ChooseMode::on_btnServerEnter_clicked()
         connect(m_pNetworkGame,&NetGameWindow::ConnectEachOther,this,&ChooseMode::ShowNetGameView);
         connect(m_pNetworkGame,&NetGameWindow::destroyed,m_pNetworkGame,&NetGameWindow::deleteLater);
         connect(m_pNetworkGame,&NetGameWindow::destroyed,this,&ChooseMode::ClearNetworkGame);
-        //QTcpServer* server = new QTcpServer(this);
-        //int port = ui->ServerPorttextEdit->toPlainText().toInt();
-        //bool blisten = server->listen(QHostAddress::Any,port);
-        //connect(server,&QTcpServer::newConnection,this,&NetGameWindow::HandleNewConnection);
     }
 }
 
@@ -129,4 +129,44 @@ void ChooseMode::on_comboBox_currentIndexChanged(int index)
         ui->labelConnection->setText("as client and BLACK team.");
     else
         ui->labelConnection->setText("as server and RED team.");
+}
+
+void ChooseMode::SettingPageButton()
+{
+    ui->page->setStyleSheet(
+                "QPushButton{background-color:rgb(75,152,210);color: black;border-radius: 15px;"
+                "border-style: outset;}"
+                "QPushButton:hover{background-color:rgb(73,90,104); color: white;border-radius: 15px}"
+                "QPushButton:pressed{background-color:rgb(67, 203, 208);border-radius: 15px;"
+                "border-style: inset; }");
+}
+
+void ChooseMode::SettingPage2Button()
+{
+    ui->page_2->setStyleSheet(
+                "QPushButton{background-color:rgb(75,152,210);color: black;border-radius: 15px;"
+                "border-style: outset;}"
+                "QPushButton:hover{background-color:rgb(73,90,104); color: white;border-radius: 15px}"
+                "QPushButton:pressed{background-color:rgb(67, 203, 208);border-radius: 15px;"
+                "border-style: inset; }");
+}
+
+void ChooseMode::SettingPage3Button()
+{
+    ui->page_3->setStyleSheet(
+                "QPushButton{background-color:rgb(75,152,210);color: black;border-radius: 15px;"
+                "border-style: outset;}"
+                "QPushButton:hover{background-color:rgb(73,90,104); color: white;border-radius: 15px}"
+                "QPushButton:pressed{background-color:rgb(67, 203, 208);border-radius: 15px;"
+                "border-style: inset; }");
+}
+
+void ChooseMode::SettingPage4Button()
+{
+    ui->page_4->setStyleSheet(
+                "QPushButton{background-color:rgb(75,152,210);color: black;border-radius: 15px;"
+                "border-style: outset;}"
+                "QPushButton:hover{background-color:rgb(73,90,104); color: white;border-radius: 15px}"
+                "QPushButton:pressed{background-color:rgb(67, 203, 208);border-radius: 15px;"
+                "border-style: inset; }");
 }

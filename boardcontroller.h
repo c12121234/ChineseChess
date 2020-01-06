@@ -4,6 +4,7 @@
 #include <QObject>
 #include <vector>
 #include <utility>
+#include "ChessID.h"
 class ChessBoard;
 class MainWindow;
 class QMouseEvent;
@@ -18,6 +19,7 @@ signals:
     void SendCoordinateToViewUpdate(std::pair<int,int> p1,std::pair<int,int> p2);
     void SendBeepSound();
     void SendChangedm_pCoordinate(int posX1,int posY1,int posX2,int posY2);
+    void SendTurnChange(Team tTeam);
 public slots:
     void HandleMouseEventFromView(QGraphicsSceneMouseEvent* event);
     void InitBoardChess();    
@@ -43,6 +45,7 @@ private:
     int m_nChessYBegin;
     int m_nPairCoodinateIndex;
     bool m_bEnableBeepSound;
+    Team m_Team;
 };
 
 #endif // BOARDCONTROLLER_H

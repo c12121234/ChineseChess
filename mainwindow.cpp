@@ -23,6 +23,7 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
     , m_spScene(std::make_shared<MyGraphicsScene>())
     , m_spBoardImage(std::make_shared<QImage>())
+    , m_spTextItem(std::make_shared<QGraphicsTextItem>())
     //, m_spBoardController(std::make_shared<BoardController>(this))
 {
     MainWindow* pTemp = this;
@@ -34,8 +35,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->ActionNewGame,&QAction::triggered,this,&MainWindow::HandleNewGame);
     connect(ui->ActionNewGame,&QAction::triggered,m_pBoardController,&BoardController::InitBoardChess);
     ui->graphicsView->installEventFilter(this);
-    InitScene();
-
+    InitScene();    
 }
 
 MainWindow::~MainWindow()
@@ -99,8 +99,22 @@ void MainWindow::HandleNewGame()
     BindingRedTeam();
     BindingBlackTeam();
     ShowAllChess();
-    //ui->graphicsView->show();
     ui->graphicsView->update();
+}
+
+void MainWindow::HandleChangeTurn(Team tTeam)
+{
+    if(tTeam == RED)
+    {
+        m_spTextItem->setPlainText("紅 方");
+        m_spTextItem->setDefaultTextColor(QColor(200,0,0));
+    }
+    else
+    {
+        m_spTextItem->setPlainText("黑 方");
+        m_spTextItem->setDefaultTextColor(Qt::black);
+    }
+
 }
 
 void MainWindow::InitScene()
@@ -113,7 +127,7 @@ void MainWindow::InitScene()
     m_spBoardImage->load("Resource/Board.png");
     m_spScene->addPixmap(QPixmap::fromImage(*m_spBoardImage));        
     InitChess();
-    //connect(ui->ActionNewGame,&QAction::triggered,this,&MainWindow::HandleNewGame);
+    InitTurnIcon();
     ui->graphicsView->show();
 }
 
@@ -131,6 +145,18 @@ void MainWindow::InitChess()
     }
     BindingRedTeam();
     BindingBlackTeam();
+}
+
+void MainWindow::InitTurnIcon()
+{
+    m_spTextItem->setPlainText("紅 方");
+    m_spTextItem->setDefaultTextColor(QColor(200,0,0));
+    QFont font = m_spTextItem->font();
+    font.setPixelSize(24);
+    m_spTextItem->setFont(font);
+    m_spTextItem->setPos(600,280);
+    m_spScene->addItem(m_spTextItem.get());
+    connect(m_pBoardController,&BoardController::SendTurnChange,this,&MainWindow::HandleChangeTurn);
 }
 
 void MainWindow::CreateChessPair(int i)

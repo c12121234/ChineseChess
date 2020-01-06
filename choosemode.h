@@ -46,6 +46,10 @@ private slots:
     void on_comboBox_currentIndexChanged(int index);
 
 private:
+    void SettingPageButton();
+    void SettingPage2Button();
+    void SettingPage3Button();
+    void SettingPage4Button();
     Ui::ChooseMode *ui;
     MainWindow* m_pLocalGame;
     NetGameWindow* m_pNetworkGame;

@@ -19,9 +19,10 @@ BoardController::BoardController(MainWindow** ppMainWindow,QObject *parent) : QO
 , m_nChessYBegin(39)
 , m_nPairCoodinateIndex(0)
 , m_bEnableBeepSound(true)
+, m_Team(RED)
 {    
     connect(this,&BoardController::SendCoordinateToViewUpdate,m_pMainWindow,&MainWindow::HandleCoordinateToViewUpdate);
-    QTimer::singleShot(50,this,&BoardController::InitBoardChess);
+    QTimer::singleShot(50,this,&BoardController::InitBoardChess);    
 }
 
 BoardController::~BoardController()
@@ -99,12 +100,20 @@ void BoardController::DoChessMove()
             ControlAlarm();
         return;
     }
+    if(chess1 != m_Team)
+    {
+        qDebug()<<"not your chess.";
+        ControlAlarm();
+        return;
+    }
     bool bRet = m_pChessBoard->MoveChess(m_pCoodinate->operator[](0).first,m_pCoodinate->operator[](0).second,
                              m_pCoodinate->operator[](1).first,m_pCoodinate->operator[](1).second);
     if(bRet)
     {
         //emit updateboard.
-        emit SendCoordinateToViewUpdate(m_pCoodinate->operator[](0),m_pCoodinate->operator[](1));        
+        m_Team = (m_Team == RED)?BLACK:RED;
+        emit SendCoordinateToViewUpdate(m_pCoodinate->operator[](0),m_pCoodinate->operator[](1));
+        emit SendTurnChange(m_Team);
     }
     else
     {
